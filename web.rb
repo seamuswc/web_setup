@@ -12,7 +12,14 @@ if ARGV.length > 0
     lines = file.readlines #an array
 
     # Find the line with the array definition
-    arr_line_index = lines.find_index { |line| line.include?('urls = ') }
+    arr_line_index = lines.find_index { |line| line.include?('urls = [') }
+    arr_line_index_end = lines.find_index { |line| line.include?(']') }
+    # Make sure the array is on a single line or the program will bug. Essentially a storge limit bug
+    if arr_line_index != arr_line_index_end
+      puts "too many sites"
+      return
+    end
+
 
     # Extract current elements from the array definition
     match_result = lines[arr_line_index].match(/urls = \[(.*)\]/)
